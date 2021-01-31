@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AdmissionTestingSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Administrator">
+          <Key>
+            <PropertyRef Name="Cnic" />
+          </Key>
+          <Property Name="Cnic" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Image" Type="image" />
+        </EntityType>
+        <EntityType Name="ExamPaper">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Name" Type="text" />
+          <Property Name="TotalQuestions" Type="int" />
+          <Property Name="TimeDuration" Type="int" />
+          <Property Name="MarksPerQuestion" Type="int" />
+        </EntityType>
+        <EntityType Name="Questions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="text" />
+          <Property Name="OptionA" Type="text" />
+          <Property Name="OptionB" Type="text" />
+          <Property Name="OptionC" Type="text" />
+          <Property Name="OptionD" Type="text" />
+          <Property Name="CorrectAns" Type="varchar" MaxLength="2" />
+          <Property Name="PaperId" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Result">
+          <Key>
+            <PropertyRef Name="CnicNo" />
+          </Key>
+          <Property Name="CnicNo" Type="bigint" Nullable="false" />
+          <Property Name="CorrectAnswers" Type="int" />
+          <Property Name="IncorrectAnswers" Type="int" Nullable="false" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudentInformation">
+          <Key>
+            <PropertyRef Name="StudentCnic" />
+          </Key>
+          <Property Name="StudentCnic" Type="bigint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="FatherName" Type="varchar" MaxLength="100" />
+          <Property Name="Email" Type="text" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="Batch" Type="text" />
+          <Property Name="PhoneNo" Type="bigint" />
+          <Property Name="DateOfBirth" Type="date" />
+          <Property Name="Address" Type="text" />
+          <Property Name="StudentImage" Type="image" />
+          <Property Name="ExamPaperId" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_Questions_ExamPaper">
+          <End Role="ExamPaper" Type="Self.ExamPaper" Multiplicity="0..1" />
+          <End Role="Questions" Type="Self.Questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExamPaper">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Questions">
+              <PropertyRef Name="PaperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_StudentInformation">
+          <End Role="StudentInformation" Type="Self.StudentInformation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Result" Type="Self.Result" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="StudentInformation">
+              <PropertyRef Name="StudentCnic" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="CnicNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentInformation_ExamPaper">
+          <End Role="ExamPaper" Type="Self.ExamPaper" Multiplicity="0..1" />
+          <End Role="StudentInformation" Type="Self.StudentInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExamPaper">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentInformation">
+              <PropertyRef Name="ExamPaperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AdmissionTestingSystemModelStoreContainer">
+          <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamPaper" EntityType="Self.ExamPaper" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Result" EntityType="Self.Result" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentInformation" EntityType="Self.StudentInformation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Questions_ExamPaper" Association="Self.FK_Questions_ExamPaper">
+            <End Role="ExamPaper" EntitySet="ExamPaper" />
+            <End Role="Questions" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_StudentInformation" Association="Self.FK_Result_StudentInformation">
+            <End Role="StudentInformation" EntitySet="StudentInformation" />
+            <End Role="Result" EntitySet="Result" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentInformation_ExamPaper" Association="Self.FK_StudentInformation_ExamPaper">
+            <End Role="ExamPaper" EntitySet="ExamPaper" />
+            <End Role="StudentInformation" EntitySet="StudentInformation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AdmissionTestingSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="StudentInformation">
+          <Key>
+            <PropertyRef Name="StudentCnic" />
+          </Key>
+          <Property Name="StudentCnic" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FatherName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Batch" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNo" Type="Int64" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StudentImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ExamPaperId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ExamPaper" Relationship="AdmissionTestingSystemModel.FK_StudentInformation_ExamPaper" FromRole="StudentInformation" ToRole="ExamPaper" />
+          <NavigationProperty Name="Result" Relationship="AdmissionTestingSystemModel.FK_Result_StudentInformation" FromRole="StudentInformation" ToRole="Result" />
+        </EntityType>
+        <EntityContainer Name="AdmissionTestingSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="StudentInformations" EntityType="Self.StudentInformation" />
+          <EntitySet Name="Administrators" EntityType="AdmissionTestingSystemModel.Administrator" />
+          <EntitySet Name="ExamPapers" EntityType="AdmissionTestingSystemModel.ExamPaper" />
+          <EntitySet Name="Questions" EntityType="AdmissionTestingSystemModel.Question" />
+          <AssociationSet Name="FK_Questions_ExamPaper" Association="AdmissionTestingSystemModel.FK_Questions_ExamPaper">
+            <End Role="ExamPaper" EntitySet="ExamPapers" />
+            <End Role="Question" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentInformation_ExamPaper" Association="AdmissionTestingSystemModel.FK_StudentInformation_ExamPaper">
+            <End Role="ExamPaper" EntitySet="ExamPapers" />
+            <End Role="StudentInformation" EntitySet="StudentInformations" />
+          </AssociationSet>
+          <EntitySet Name="Results" EntityType="AdmissionTestingSystemModel.Result" />
+          <AssociationSet Name="FK_Result_StudentInformation" Association="AdmissionTestingSystemModel.FK_Result_StudentInformation">
+            <End Role="StudentInformation" EntitySet="StudentInformations" />
+            <End Role="Result" EntitySet="Results" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Administrator">
+          <Key>
+            <PropertyRef Name="Cnic" />
+          </Key>
+          <Property Name="Cnic" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="ExamPaper">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TotalQuestions" Type="Int32" />
+          <Property Name="TimeDuration" Type="Int32" />
+          <Property Name="MarksPerQuestion" Type="Int32" />
+          <NavigationProperty Name="Questions" Relationship="AdmissionTestingSystemModel.FK_Questions_ExamPaper" FromRole="ExamPaper" ToRole="Question" />
+          <NavigationProperty Name="StudentInformations" Relationship="AdmissionTestingSystemModel.FK_StudentInformation_ExamPaper" FromRole="ExamPaper" ToRole="StudentInformation" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Question1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OptionA" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OptionB" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OptionC" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OptionD" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CorrectAns" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="PaperId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ExamPaper" Relationship="AdmissionTestingSystemModel.FK_Questions_ExamPaper" FromRole="Question" ToRole="ExamPaper" />
+        </EntityType>
+        <Association Name="FK_Questions_ExamPaper">
+          <End Type="AdmissionTestingSystemModel.ExamPaper" Role="ExamPaper" Multiplicity="0..1" />
+          <End Type="AdmissionTestingSystemModel.Question" Role="Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExamPaper">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="PaperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentInformation_ExamPaper">
+          <End Type="AdmissionTestingSystemModel.ExamPaper" Role="ExamPaper" Multiplicity="0..1" />
+          <End Type="AdmissionTestingSystemModel.StudentInformation" Role="StudentInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExamPaper">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentInformation">
+              <PropertyRef Name="ExamPaperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Result">
+          <Key>
+            <PropertyRef Name="CnicNo" />
+          </Key>
+          <Property Name="CnicNo" Type="Int64" Nullable="false" />
+          <Property Name="CorrectAnswers" Type="Int32" />
+          <Property Name="IncorrectAnswers" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <NavigationProperty Name="StudentInformation" Relationship="AdmissionTestingSystemModel.FK_Result_StudentInformation" FromRole="Result" ToRole="StudentInformation" />
+        </EntityType>
+        <Association Name="FK_Result_StudentInformation">
+          <End Type="AdmissionTestingSystemModel.StudentInformation" Role="StudentInformation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="AdmissionTestingSystemModel.Result" Role="Result" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="StudentInformation">
+              <PropertyRef Name="StudentCnic" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="CnicNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AdmissionTestingSystemModelStoreContainer" CdmEntityContainer="AdmissionTestingSystemEntities">
+          <EntitySetMapping Name="StudentInformations">
+            <EntityTypeMapping TypeName="AdmissionTestingSystemModel.StudentInformation">
+              <MappingFragment StoreEntitySet="StudentInformation">
+                <ScalarProperty Name="ExamPaperId" ColumnName="ExamPaperId" />
+                <ScalarProperty Name="StudentCnic" ColumnName="StudentCnic" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Batch" ColumnName="Batch" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="StudentImage" ColumnName="StudentImage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Administrators">
+            <EntityTypeMapping TypeName="AdmissionTestingSystemModel.Administrator">
+              <MappingFragment StoreEntitySet="Administrator">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Cnic" ColumnName="Cnic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExamPapers">
+            <EntityTypeMapping TypeName="AdmissionTestingSystemModel.ExamPaper">
+              <MappingFragment StoreEntitySet="ExamPaper">
+                <ScalarProperty Name="MarksPerQuestion" ColumnName="MarksPerQuestion" />
+                <ScalarProperty Name="TimeDuration" ColumnName="TimeDuration" />
+                <ScalarProperty Name="TotalQuestions" ColumnName="TotalQuestions" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questions">
+            <EntityTypeMapping TypeName="AdmissionTestingSystemModel.Question">
+              <MappingFragment StoreEntitySet="Questions">
+                <ScalarProperty Name="PaperId" ColumnName="PaperId" />
+                <ScalarProperty Name="CorrectAns" ColumnName="CorrectAns" />
+                <ScalarProperty Name="OptionD" ColumnName="OptionD" />
+                <ScalarProperty Name="OptionC" ColumnName="OptionC" />
+                <ScalarProperty Name="OptionB" ColumnName="OptionB" />
+                <ScalarProperty Name="OptionA" ColumnName="OptionA" />
+                <ScalarProperty Name="Question1" ColumnName="Question" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Results">
+            <EntityTypeMapping TypeName="AdmissionTestingSystemModel.Result">
+              <MappingFragment StoreEntitySet="Result">
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="IncorrectAnswers" ColumnName="IncorrectAnswers" />
+                <ScalarProperty Name="CorrectAnswers" ColumnName="CorrectAnswers" />
+                <ScalarProperty Name="CnicNo" ColumnName="CnicNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
